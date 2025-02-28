@@ -1,1 +1,87 @@
-[]
+[
+  {
+    "id": "1",
+    "summary": "Desarrollador Full Stack con experiencia en Python y React",
+    "skills": [
+      {"name": "Python"},
+      {"name": "FastAPI"},
+      {"name": "React"},
+      {"name": "TypeScript"},
+      {"name": "Docker"},
+      {"name": "AWS"},
+      {"name": "Git"}
+    ],
+    "experience": [
+      {
+        "position": "Desarrollador Full Stack Senior",
+        "company": "Tech Solutions Inc",
+        "description": "Desarrollo de aplicaciones web escalables usando Python/FastAPI en backend y React en frontend. Implementación de CI/CD con GitHub Actions. Optimización de rendimiento y seguridad."
+      },
+      {
+        "position": "Desarrollador Python",
+        "company": "Data Analytics Co",
+        "description": "Desarrollo de APIs RESTful, integración con servicios cloud, implementación de microservicios con Docker y Kubernetes."
+      }
+    ],
+    "certifications": [
+      {"name": "AWS Certified Developer"},
+      {"name": "Python Professional Certificate"}
+    ]
+  },
+  {
+    "id": "2",
+    "summary": "Data Scientist especializado en Machine Learning",
+    "skills": [
+      {"name": "Python"},
+      {"name": "TensorFlow"},
+      {"name": "PyTorch"},
+      {"name": "Scikit-learn"},
+      {"name": "SQL"},
+      {"name": "Power BI"}
+    ],
+    "experience": [
+      {
+        "position": "Data Scientist Senior",
+        "company": "AI Solutions",
+        "description": "Desarrollo de modelos de machine learning para análisis predictivo. Implementación de pipelines de procesamiento de datos. Optimización de modelos de NLP."
+      },
+      {
+        "position": "Data Analyst",
+        "company": "Business Analytics Corp",
+        "description": "Análisis de datos empresariales, creación de dashboards, implementación de modelos estadísticos para toma de decisiones."
+      }
+    ],
+    "certifications": [
+      {"name": "TensorFlow Developer Certificate"},
+      {"name": "IBM Data Science Professional Certificate"}
+    ]
+  },
+  {
+    "id": "3",
+    "summary": "DevOps Engineer con enfoque en automatización",
+    "skills": [
+      {"name": "Docker"},
+      {"name": "Kubernetes"},
+      {"name": "AWS"},
+      {"name": "Terraform"},
+      {"name": "Jenkins"},
+      {"name": "Python"}
+    ],
+    "experience": [
+      {
+        "position": "DevOps Engineer",
+        "company": "Cloud Solutions Ltd",
+        "description": "Implementación y mantenimiento de infraestructura cloud, automatización de despliegues, gestión de contenedores y orquestación con Kubernetes."
+      },
+      {
+        "position": "System Administrator",
+        "company": "Tech Corp",
+        "description": "Administración de sistemas Linux, implementación de soluciones de monitoreo, gestión de backups y seguridad."
+      }
+    ],
+    "certifications": [
+      {"name": "AWS Solutions Architect"},
+      {"name": "Certified Kubernetes Administrator"}
+    ]
+  }
+]

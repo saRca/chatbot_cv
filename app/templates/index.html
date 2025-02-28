@@ -92,17 +92,181 @@
         </div>
     </footer>
 
+    <div class="flex flex-col h-screen bg-gray-50">
+        <!-- Header -->
+        <header class="bg-white shadow-sm p-4 flex items-center justify-between">
+            <h1 class="text-xl font-semibold text-gray-800">CV Assistant Chat</h1>
+            <div class="flex items-center space-x-4">
+                <button id="theme-toggle" class="p-2 rounded-lg hover:bg-gray-100">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <!-- Moon icon -->
+                        <path class="dark:hidden" d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+                        <!-- Sun icon -->
+                        <path class="hidden dark:block" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Chat Container -->
+        <div class="flex-1 overflow-y-auto p-4 space-y-4" id="chat-container">
+            <!-- Los mensajes aparecerán aquí -->
+        </div>
+        
+        <!-- Loading Indicator -->
+        <div id="loading-indicator" class="hidden">
+            <div class="flex items-center justify-center space-x-2 bg-blue-50 text-blue-700 p-3 mx-4 mb-2 rounded-lg shadow-sm">
+                <span class="font-medium">Generando respuesta</span>
+                <div class="typing-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="border-t bg-white p-4">
+            <form id="chat-form" class="flex space-x-4">
+                <input 
+                    type="text" 
+                    id="user-input"
+                    class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Escribe tu mensaje aquí..."
+                >
+                <button 
+                    type="submit"
+                    class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                >
+                    Enviar
+                </button>
+            </form>
+        </div>
+    </div>
+
     <script>
+        let sessionId = null;
+        const chatContainer = document.getElementById('chat-container');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const chatForm = document.getElementById('chat-form');
+        const userInput = document.getElementById('user-input');
+        const themeToggle = document.getElementById('theme-toggle');
+
         // Theme toggle
-        const themeController = document.querySelector('.theme-controller');
-        themeController.addEventListener('change', (e) => {
-            const html = document.querySelector('html');
-            if (e.target.checked) {
-                html.setAttribute('data-theme', 'dark');
-            } else {
-                html.setAttribute('data-theme', 'light');
-            }
+        themeToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
         });
+
+        // Check for saved theme
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        }
+
+        function formatMessage(text, isAssistant = false) {
+            if (!isAssistant) {
+                return `<div class="message user-message">${text}</div>`;
+            }
+
+            // Separar las secciones por números
+            const sections = text.split(/(?=\d\.\s*\*\*)/);
+            
+            let formattedText = '<div class="message assistant-message">';
+            
+            sections.forEach(section => {
+                if (section.trim()) {
+                    // Extraer el título de la sección
+                    const titleMatch = section.match(/\d\.\s*\*\*(.*?)\*\*/);
+                    if (titleMatch) {
+                        const title = titleMatch[1];
+                        const content = section.replace(/\d\.\s*\*\*(.*?)\*\*/, '').trim();
+                        
+                        formattedText += `
+                            <div class="message-section">
+                                <div class="message-section-title">${title}</div>
+                                <div class="message-content">
+                                    ${formatContent(content)}
+                                </div>
+                            </div>`;
+                    } else {
+                        formattedText += `<div class="message-section">${formatContent(section)}</div>`;
+                    }
+                }
+            });
+            
+            return formattedText + '</div>';
+        }
+
+        function formatContent(content) {
+            // Resaltar palabras clave
+            content = content.replace(/-(.*?)(?=-|\n|$)/g, match => {
+                const keyword = match.substring(1).trim();
+                return `<li>${highlightKeywords(keyword)}</li>`;
+            });
+            
+            return `<ul class="message-list">${content}</ul>`;
+        }
+
+        function highlightKeywords(text) {
+            // Resaltar términos técnicos
+            text = text.replace(/(HTML|CSS|JavaScript|React|Node\.js|[\w.-]+\.(js|py|html|css))/g, 
+                '<span class="keyword">$1</span>');
+            
+            // Resaltar verbos de acción
+            text = text.replace(/\b(Desarrollé|Diseñé|Implementé|Colaboré|Lideré|Optimicé|Resolví|Coordiné)\b/g, 
+                '<span class="action-verb">$1</span>');
+            
+            return text;
+        }
+
+        async function sendMessage(message) {
+            if (!message.trim()) return;
+
+            const userMessageDiv = document.createElement('div');
+            userMessageDiv.innerHTML = formatMessage(message);
+            chatContainer.appendChild(userMessageDiv);
+            
+            loadingIndicator.classList.remove('hidden');
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        session_id: sessionId
+                    })
+                });
+
+                const data = await response.json();
+                sessionId = data.session_id;
+
+                const assistantMessageDiv = document.createElement('div');
+                assistantMessageDiv.innerHTML = formatMessage(data.response, true);
+                loadingIndicator.classList.add('hidden');
+                chatContainer.appendChild(assistantMessageDiv);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            } catch (error) {
+                console.error('Error:', error);
+                loadingIndicator.classList.add('hidden');
+                const errorDiv = document.createElement('div');
+                errorDiv.innerHTML = formatMessage('Lo siento, ha ocurrido un error. Por favor, intenta de nuevo.', true);
+                chatContainer.appendChild(errorDiv);
+            }
+        }
+
+        chatForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const message = userInput.value;
+            userInput.value = '';
+            sendMessage(message);
+        });
+
+        // Iniciar chat
+        sendMessage('Hola, ¿cómo puedo ayudarte con tu CV?');
     </script>
 </body>
 </html>

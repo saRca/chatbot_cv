@@ -21,13 +21,18 @@ wheels/
 .installed.cfg
 *.egg
 
+# Environment variables
+.env
+.env.*
+!.env.example
+
 # Virtual Environment
 venv/
 ENV/
 
 # IDE
-.idea/
 .vscode/
+.idea/
 *.swp
 *.swo
 
@@ -41,5 +46,4 @@ ehthumbs.db
 Thumbs.db
 
 # Project specific
-.env
 *.log

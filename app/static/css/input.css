@@ -1,3 +1,137 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Tema oscuro */
+.dark {
+    @apply bg-gray-900;
+}
+
+.dark .bg-white {
+    @apply bg-gray-800;
+}
+
+.dark .text-gray-800 {
+    @apply text-gray-100;
+}
+
+.dark .bg-gray-50 {
+    @apply bg-gray-900;
+}
+
+.dark .border-gray-300 {
+    @apply border-gray-600;
+}
+
+/* Animación de puntos de carga */
+.typing-dots {
+    display: inline-flex;
+    align-items: center;
+}
+
+.typing-dots span {
+    width: 4px;
+    height: 4px;
+    margin: 0 2px;
+    background-color: currentColor;
+    border-radius: 50%;
+    animation: typing 1s infinite ease-in-out;
+}
+
+.typing-dots span:nth-child(1) {
+    animation-delay: 200ms;
+}
+
+.typing-dots span:nth-child(2) {
+    animation-delay: 300ms;
+}
+
+.typing-dots span:nth-child(3) {
+    animation-delay: 400ms;
+}
+
+@keyframes typing {
+    0%, 100% {
+        transform: translateY(0);
+        opacity: 0.2;
+    }
+    50% {
+        transform: translateY(-5px);
+        opacity: 1;
+    }
+}
+
+/* Estilos para los mensajes del chat */
+.message {
+    @apply p-4 rounded-lg shadow-sm mb-4 max-w-3xl transition-all duration-200;
+}
+
+.user-message {
+    @apply bg-blue-50 text-blue-900 ml-auto dark:bg-blue-900 dark:text-blue-100;
+}
+
+.assistant-message {
+    @apply bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100;
+}
+
+.message-section {
+    @apply mb-4 last:mb-0;
+}
+
+.message-section-title {
+    @apply font-semibold text-lg mb-2 text-blue-700 dark:text-blue-400;
+}
+
+.message-list {
+    @apply list-disc pl-5 space-y-2;
+}
+
+.message-list li {
+    @apply leading-relaxed;
+}
+
+.keyword {
+    @apply font-medium text-blue-600 dark:text-blue-400;
+}
+
+.action-verb {
+    @apply font-medium text-green-600 dark:text-green-400;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Input y botones */
+.focus\:ring-2:focus {
+    @apply outline-none;
+}
+
+/* Scrollbar personalizado */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 dark:bg-gray-600 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400 dark:bg-gray-500;
+}

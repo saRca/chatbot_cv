@@ -71,14 +71,7 @@ async def chat_message(message: dict):
         
         session = active_sessions.get(session_id)
         if not session:
-            logger.info(f"Creando nueva sesión para ID {session_id}")
-            session = ChatSession()
-            session.session_id = session_id  # Asignar el session_id existente
-            active_sessions[session_id] = session
-        
-        # Agregar el mensaje del usuario a la sesión
-        user_message = Message(role="user", content=message["message"])
-        session.messages.append(user_message)
+            raise ValueError(f"Sesión no encontrada: {session_id}")
         
         # Procesar el mensaje y obtener la respuesta
         response = chat_service.process_message(session, message["message"])
@@ -91,9 +84,12 @@ async def chat_message(message: dict):
             "response": response,
             "session_id": session_id
         }
+    except ValueError as e:
+        logger.error(f"Error de validación: {str(e)}")
+        return {"error": str(e)}
     except Exception as e:
         logger.error(f"Error en el chat: {str(e)}")
-        return {"error": str(e)}
+        return {"error": "Error interno del servidor"}
 
 if __name__ == "__main__":
     import uvicorn
