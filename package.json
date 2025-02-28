@@ -1,0 +1,12 @@
+{
+  "name": "cv-assistant",
+  "version": "1.0.0",
+  "description": "CV Assistant with AI",
+  "scripts": {
+    "build:css": "tailwindcss -i ./app/static/css/input.css -o ./app/static/css/output.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.1",
+    "daisyui": "^4.7.2"
+  }
+}
